@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  mariadb:
+    build: MariaDB/
+    volumes:
+      - /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
+#    networks:
+#      - web
+
+# Host-mounted volume: /host/path:/container/path (Binded to the host given path)
+# Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
+# Anonymous volume: /container/path/only (After container is removed, data is erased, volume cannot be accessed by another container)
+
+#networks:
+#  web:
