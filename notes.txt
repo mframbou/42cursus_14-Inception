@@ -1,0 +1,26 @@
+https://www.youtube.com/watch?v=3c-iBn73dDE
+
+Docker works with layer of applications
+(EG. OS, DB, Node-js etc. are all different layers)
+
+When pulling a docker already present they are not downloaded again.
+Layers can be used by multiple containers at once
+
+docker run -d = detach mode
+
+docker ps = list containers
+docker images = list images
+
+(execute in interactive terminal = see container terminal)
+docker exec -it <id or name> <shell = /bin/bash>
+
+docker run <image> = create container from image (-d = detach, -p = ports binding (-p<host:container>), --name <name>)
+docker start = restart a stopped container
+
+Docker compose:
+version is the docker compose version
+a network is automatically created common to the containers
+
+Dockerfile:
+RUN can be used multiple times
+CMD is the entry-point, the "main command"
