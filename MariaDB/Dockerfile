@@ -12,7 +12,7 @@ RUN apk add mariadb mariadb-client
 # https://stackoverflow.com/questions/42153059/mysqld-safe-directory-var-run-mysqld-for-unix-socket-file-dont-exists
 RUN mkdir /run/mysqld
 
-RUN mysql_install_db --user=root --datadir=/var/lib/mysql
+COPY ./run_mariadb.sh /run_mariadb.sh
 
-# You should either run mysql_install_db with the same account that will be running mysqld or run it as root with --user
-CMD ["mysqld", "--user=root"]
+# Run the script separately because mounting of volume is done at runtime, so install on mounted volume not on "base" volume
+CMD ["sh", "/run_mariadb.sh"]
