@@ -8,8 +8,8 @@ services:
       - MARIADB_PASSWORD=wordpress
     ports:
       - 3306:3306
-#    volumes:
-#      - /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
+    volumes:
+      - /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
   adminer_container:
     image: adminer:latest
     environment:
