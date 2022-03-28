@@ -6,16 +6,23 @@ services:
     environment:
       - MARIADB_USER=wordpress
       - MARIADB_PASSWORD=wordpress
+    ports:
+      - 3306:3306
 #    volumes:
 #      - /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
-  adminer:
-    image: adminer
-    container_name: adminer
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
     environment:
-      ADMINER_DEFAULT_SERVER: mariadb
+        - PMA_ARBITRARY=1
+        - PMA_HOST=mariadb
     restart: always
     ports:
-      - 7777:8080
+        - 8080:80
+    volumes:
+        - /sessions
+    links:
+        - mariadb
 #    networks:
 #      - web
 

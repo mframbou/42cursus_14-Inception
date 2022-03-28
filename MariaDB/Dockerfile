@@ -12,6 +12,8 @@ RUN apk add mariadb mariadb-client
 # https://stackoverflow.com/questions/42153059/mysqld-safe-directory-var-run-mysqld-for-unix-socket-file-dont-exists
 RUN mkdir /run/mysqld
 
+COPY ./mariadb-config.cnf /etc/my.cnf.d/mariadb-server.cnf
+
 COPY ./run_mariadb.sh /run_mariadb.sh
 COPY ./wordpress.sql /wordpress.sql
 
