@@ -22,6 +22,18 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	fi
 
 	echo "Creating wordpress user / db"
+
+	# Note for myself: don't forget quotes around the passwords / hostnames / usernames, otherwise it won't work
+	echo "
+	CREATE DATABASE wordpress;
+	CREATE USER '"$MARIADB_USER"'@'localhost' IDENTIFIED BY "$MARIADB_PASSWORD";
+
+	GRANT ALL PRIVILEGES ON *.* TO '"$MARIADB_USER"'@'localhost' IDENTIFIED BY '"$MARIADB_PASSWORD"'  WITH GRANT OPTION;
+	GRANT ALL PRIVILEGES ON *.* TO '"$MARIADB_USER"'@'172.19.0.%' IDENTIFIED BY '"$MARIADB_PASSWORD"' WITH GRANT OPTION;
+
+	FLUSH PRIVILEGES;" > /wordpress.sql
+
+	#echo "GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.19.0.%' IDENTIFIED BY 'my-new-password' WITH GRANT OPTION;" > /wordpress.sql
 	mariadb < /wordpress.sql
 
 	echo "Successfully intitialized mariadb"
