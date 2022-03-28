@@ -6,7 +6,7 @@
 
 # this is only for the mysqld standalone daemon
 [mysqld]
-skip-networking
+#skip-networking
 
 # Galera-related settings
 [galera]
@@ -20,6 +20,7 @@ skip-networking
 #
 # Allow server to accept connections on all interfaces.
 #
+port=3306
 bind-address=0.0.0.0
 #
 # Optional setting
