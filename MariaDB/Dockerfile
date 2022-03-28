@@ -13,6 +13,7 @@ RUN apk add mariadb mariadb-client
 RUN mkdir /run/mysqld
 
 COPY ./run_mariadb.sh /run_mariadb.sh
+COPY ./wordpress.sql /wordpress.sql
 
 # Run the script separately because mounting of volume is done at runtime, so install on mounted volume not on "base" volume
 CMD ["sh", "/run_mariadb.sh"]

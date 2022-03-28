@@ -3,8 +3,19 @@ version: "3.9"
 services:
   mariadb:
     build: MariaDB/
-    volumes:
-      - /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
+    environment:
+      - MARIADB_USER=wordpress
+      - MARIADB_PASSWORD=wordpress
+#    volumes:
+#      - /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
+  adminer:
+    image: adminer
+    container_name: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    restart: always
+    ports:
+      - 7777:8080
 #    networks:
 #      - web
 
