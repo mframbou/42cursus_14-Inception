@@ -27,7 +27,7 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 
 	# Use *.* and not * for all databases (To use * we need to select a DB, when using *.* it basically means ALL)
 	# https://dev.mysql.com/doc/refman/8.0/en/grant.html
-	echo "
+	mariadb -e "
 	CREATE DATABASE wordpress;
 	CREATE USER '$MARIADB_USER'@'localhost' IDENTIFIED BY '$MARIADB_PASSWORD';
 
@@ -36,13 +36,14 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 
 	GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.19.0.%' IDENTIFIED BY 'root' WITH GRANT OPTION;
 
-	FLUSH PRIVILEGES;" > /wordpress.sql
-	mariadb < /wordpress.sql
+	FLUSH PRIVILEGES;"
 
 	echo "Successfully intitialized mariadb"
 
-	# Kill to reopen after, because if the process is in the background the container stops
-	pkill mariadbd
+	# Since mariadbd is launched as a background process, wait for it to exit (basically shouldn't)
+	# Otherwise the script would terminate here since there is no foreground process anymore
+	wait
+else
+	mariadbd --user=root
 fi
 
-mariadbd --user=root
