@@ -1,4 +1,5 @@
-#https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/
+# https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/
+# Removed all comments so that I can read
 
 [server]
 
