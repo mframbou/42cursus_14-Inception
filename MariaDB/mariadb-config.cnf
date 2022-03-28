@@ -1,15 +1,5 @@
 # https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/
 # Removed all comments so that I can read
 
-[server]
-
-[mysqld]
-
 [galera]
 port=3306
-
-[embedded]
-
-[mariadb]
-
-[mariadb-10.5]

@@ -1,7 +1,12 @@
 FROM alpine:3.15.2
 
 # Download and install mariadb
-RUN apk add mariadb mariadb-client
+# https://superuser.com/questions/1055060/how-to-install-a-specific-package-version-in-alpine
+
+RUN apk upgrade
+
+# Latest versions as of03/28/2022
+RUN apk add mariadb=10.6.7-r0 mariadb-client=10.6.7-r0
 
 # Initialize data directory and create system tables
 # https://mariadb.com/kb/en/mysql_install_db/
