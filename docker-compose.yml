@@ -17,7 +17,7 @@ services:
   nginx:
     build: Nginx/
     ports:
-      - 8080:80
+      - 443:443
     volumes:
       - ./wordpress_volume:/var/www/localhost/htdocs/
     depends_on:
