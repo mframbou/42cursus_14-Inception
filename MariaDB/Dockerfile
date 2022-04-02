@@ -21,9 +21,6 @@ RUN apk add gettext
 # https://stackoverflow.com/questions/42153059/mysqld-safe-directory-var-run-mysqld-for-unix-socket-file-dont-exists
 RUN mkdir /run/mysqld
 
-# No such file or directory when volume not existing
-RUN mkdir -p /var/lib/mysql
-
 COPY ./mariadb-config.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 COPY ./run_mariadb.sh /run_mariadb.sh
