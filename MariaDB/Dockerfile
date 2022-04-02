@@ -1,4 +1,4 @@
-FROM alpine:3.15.2
+FROM alpine:3.14
 
 # Download and install mariadb
 # https://superuser.com/questions/1055060/how-to-install-a-specific-package-version-in-alpine
@@ -7,7 +7,10 @@ RUN apk update
 
 # Latest versions as of 03/28/2022
 # https://pkgs.alpinelinux.org/
-RUN apk add mariadb=10.6.7-r0 mariadb-client=10.6.7-r0
+RUN apk add mariadb mariadb-client
+
+# To use envsusbt
+RUN apk add gettext
 
 # Initialize data directory and create system tables
 # https://mariadb.com/kb/en/mysql_install_db/
@@ -17,6 +20,9 @@ RUN apk add mariadb=10.6.7-r0 mariadb-client=10.6.7-r0
 # Create folder otherwise mysql does not find the socket located at /run/mysqld.sock
 # https://stackoverflow.com/questions/42153059/mysqld-safe-directory-var-run-mysqld-for-unix-socket-file-dont-exists
 RUN mkdir /run/mysqld
+
+# No such file or directory when volume not existing
+RUN mkdir -p /var/lib/mysql
 
 COPY ./mariadb-config.cnf /etc/my.cnf.d/mariadb-server.cnf
 

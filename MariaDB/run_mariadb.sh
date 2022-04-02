@@ -28,13 +28,9 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	# Use *.* and not * for all databases (To use * we need to select a DB, when using *.* it basically means ALL)
 	# https://dev.mysql.com/doc/refman/8.0/en/grant.html
 	# GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.19.0.%' IDENTIFIED BY 'root' WITH GRANT OPTION;
-	mariadb -e "
-	CREATE DATABASE wp_db;
-	CREATE USER '$MARIADB_USER'@'localhost' IDENTIFIED BY '$MARIADB_PASSWORD';
 
-	GRANT ALL PRIVILEGES ON *.* TO '$MARIADB_USER'@'%' IDENTIFIED BY '$MARIADB_PASSWORD' WITH GRANT OPTION;
-
-	FLUSH PRIVILEGES;"
+	# Envsubst subsitutes environment in text, a lot cleaner
+	#mariadb -e "$(envsubst < /wordpress.sql)"
 
 	echo "Successfully intitialized mariadb"
 

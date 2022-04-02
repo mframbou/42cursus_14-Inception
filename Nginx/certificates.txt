@@ -1,0 +1,7 @@
+https://security.stackexchange.com/questions/5126/whats-the-difference-between-ssl-tls-and-https
+
+https://www.cloudflare.com/fr-fr/learning/ssl/what-is-an-ssl-certificate/
+
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04
+
+https://codingwithmanny.medium.com/configure-self-signed-ssl-for-nginx-docker-from-a-scratch-7c2bcd5478c6

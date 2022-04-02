@@ -1,11 +1,13 @@
-version: "3.9"
+version: "3"
 
 services:
   db:
     build: MariaDB/
     environment:
-      - MARIADB_USER=wordpress
-      - MARIADB_PASSWORD=wordpress
+      - MARIADB_WP_USER=wordpress
+      - MARIADB_WP_PASSWORD=wordpress
+      - MARIADB_ADMIN_USER=pouet
+      - MARIADB_ADMIN_PASSWORD=pouet
     # ports:
     #   - 3306:3306
     volumes:
@@ -18,14 +20,27 @@ services:
       - 8080:80
     volumes:
       - ./wordpress_volume:/var/www/localhost/htdocs/
+    depends_on:
+      - wordpress
+
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8090:8080
 
   wordpress:
-    image: wordpress:php7.3-fpm-alpine
+    build: Wordpress/
     environment:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=wordpress
       - WORDPRESS_DB_PASSWORD=wordpress
       - WORDPRESS_DB_NAME=wp_db
+    volumes:
+      - ./wordpress_volume:/var/www/html
+    depends_on:
+      - db
 
   # wordpress_container:
   #   build: Wordpress/
