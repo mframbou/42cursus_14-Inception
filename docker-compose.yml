@@ -3,13 +3,8 @@ version: "3"
 services:
   db:
     build: MariaDB/
-    environment:
-      - MARIADB_WP_USER=wordpress
-      - MARIADB_WP_PASSWORD=wordpress
-      - MARIADB_ADMIN_USER=pouet
-      - MARIADB_ADMIN_PASSWORD=pouet
-    # ports:
-    #   - 3306:3306
+    env_file:
+      - .env
     volumes:
       #- /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
       - ./mariadb_volume:/var/lib/mysql
@@ -23,7 +18,6 @@ services:
     depends_on:
       - wordpress
 
-
   adminer:
     image: adminer
     restart: always
@@ -32,32 +26,19 @@ services:
 
   wordpress:
     build: Wordpress/
-    environment:
-      - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_USER=wordpress
-      - WORDPRESS_DB_PASSWORD=wordpress
-      - WORDPRESS_DB_NAME=wp_db
+    env_file:
+      - .env
     volumes:
       - ./wordpress_volume:/var/www/html
     depends_on:
       - db
 
-  # wordpress_container:
-  #   build: Wordpress/
-  #   environment:
-  #     - WORDPRESS_DB_HOST=db
-  #     - WORDPRESS_DB_USER=wordpress
-  #     - WORDPRESS_DB_PASSWORD=wordpress
-  #     - WORDPRESS_DB_NAME=wp_db
-  #   ports:
-  #     - 8090:80
-
-#    networks:
-#      - web
-
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
 # Anonymous volume: /container/path/only (After container is removed, data is erased, volume cannot be accessed by another container)
+# Networking: https://docs.docker.com/network/ , https://forums.docker.com/t/set-default-network-name-for-compose/36779/2
 
-#networks:
-#  web:
+# Simply change the name since all containers use the same network
+networks:
+  default:
+    name: inception-network

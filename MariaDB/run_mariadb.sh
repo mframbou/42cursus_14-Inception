@@ -9,7 +9,7 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	mariadb-install-db --user=root --datadir=/var/lib/mysql
 
 	# & at the end start process in the background
-	mariadbd --user=root &
+	mariadbd --user=root --unix_socket=OFF &
 
 	# Pings check whether server is running, 0 if it is, 1 if not, retry 30 times
 	# To check for exit status, don't use brackets, only command directly
@@ -27,10 +27,12 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 
 	# Use *.* and not * for all databases (To use * we need to select a DB, when using *.* it basically means ALL)
 	# https://dev.mysql.com/doc/refman/8.0/en/grant.html
-	# GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.19.0.%' IDENTIFIED BY 'root' WITH GRANT OPTION;
 
+	# Also hanges root password from blank to something
+	
 	# Envsubst subsitutes environment in text, a lot cleaner
-	#mariadb -e "$(envsubst < /wordpress.sql)"
+	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
+	mariadb -e "$(envsubst < /wordpress.sql)"
 
 	echo "Successfully intitialized mariadb"
 
@@ -38,6 +40,10 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	# Otherwise the script would terminate here since there is no foreground process anymore
 	wait
 else
-	mariadbd --user=root
+    #--user=root to run daemon as root, mandatory
+	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
+	# unix_socket is a builtin plugin that allows to not use a password when connection from local machine, disable it here
+	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/#options
+	mariadbd --user=root --unix_socket=OFF
 fi
 
