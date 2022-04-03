@@ -46,4 +46,3 @@ else
 	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/#options
 	mariadbd --user=root
 fi
-
