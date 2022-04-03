@@ -10,12 +10,17 @@ RUN apk add php7 php7-fpm
 RUN apk add wget mariadb-client
 
 # -p creates parents if needed
-# /usr/share contains architecture independant shareable text files
 RUN mkdir -p /var/www/html
+
+RUN mkdir -p /wordpress-files/
+
+# https://linux.die.net/man/1/wget , output to /var/www/html, same as WORKDIR /var/www/html then wget (default is .)
+# Download wordpress directly in image
+RUN wget https://wordpress.org/wordpress-5.9.2.tar.gz --directory-prefix=/wordpress-files/
 
 COPY ./www.conf /etc/php7/php-fpm.d/www.conf
 
-COPY ./install_and_start.sh /entrypoint.sh
+COPY ./start.sh /entrypoint.sh
 
 # -F == --nodaemonize, force to run in foreground
 CMD [ "/entrypoint.sh" ]

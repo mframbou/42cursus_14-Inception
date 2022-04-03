@@ -9,7 +9,7 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	mariadb-install-db --user=root --datadir=/var/lib/mysql
 
 	# & at the end start process in the background
-	mariadbd --user=root --unix_socket=OFF &
+	mariadbd --user=root &
 
 	# Pings check whether server is running, 0 if it is, 1 if not, retry 30 times
 	# To check for exit status, don't use brackets, only command directly
@@ -44,6 +44,6 @@ else
 	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
 	# unix_socket is a builtin plugin that allows to not use a password when connection from local machine, disable it here
 	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/#options
-	mariadbd --user=root --unix_socket=OFF
+	mariadbd --user=root
 fi
 
