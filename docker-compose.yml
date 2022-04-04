@@ -1,28 +1,29 @@
 version: "3"
 
 services:
-  db:
+
+  mariadb:
     build: MariaDB/
     env_file:
       - .env
     volumes:
-      #- /home/med/dev/42/inception-volumes/mariadb:/var/lib/mysql
       - ./mariadb_volume:/var/lib/mysql
 
   nginx:
     build: Nginx/
     ports:
       - 443:443
+      - 80:80
     volumes:
       - ./wordpress_volume:/var/www/localhost/htdocs/
     depends_on:
       - wordpress
+      - adminer
 
   adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8090:8080
+    build: Adminer/
+    env_file:
+      - .env
 
   wordpress:
     build: Wordpress/
@@ -31,7 +32,7 @@ services:
     volumes:
       - ./wordpress_volume:/var/www/html
     depends_on:
-      - db
+      - mariadb
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
