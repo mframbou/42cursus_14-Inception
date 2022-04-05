@@ -1,4 +1,4 @@
-#!/bin/sh
+# #!/bin/sh
 
 wait_and_init_mariadb()
 {
@@ -14,20 +14,23 @@ wait_and_init_mariadb()
 		exit 1
 	fi
 
-	echo "Creating wordpress user / db"
+	# If at least one arg (-eq is ==, -lt is <, -gt is >, -le is <=, -ge is >= (greater or equal))
+	if [ "$#" -ge 1 ]; then
+		echo "Creating wordpress user / db"
 
-	# Note for myself: don't forget quotes around the passwords / hostnames / usernames, otherwise it won't work (since everything is in double quotes env variables are still interpreted)
+		# Note for myself: don't forget quotes around the passwords / hostnames / usernames, otherwise it won't work (since everything is in double quotes env variables are still interpreted)
 
-	# Use *.* and not * for all databases (To use * we need to select a DB, when using *.* it basically means ALL)
-	# https://dev.mysql.com/doc/refman/8.0/en/grant.html
+		# Use *.* and not * for all databases (To use * we need to select a DB, when using *.* it basically means ALL)
+		# https://dev.mysql.com/doc/refman/8.0/en/grant.html
 
-	# Also hanges root password from blank to something
-	
-	# Envsubst subsitutes environment in text, a lot cleaner
-	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
-	mariadb -e "$(envsubst < /wordpress.sql)"
+		# Also hanges root password from blank to something
+		
+		# Envsubst subsitutes environment in text, a lot cleaner
+		# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
+		mariadb -e "$(envsubst < /$1)"
 
-	chown -R root /var/lib/mysql
+		chown -R root /var/lib/mysql
+	fi
 	
 	echo "Successfully intitialized mariadb"
 }
@@ -36,7 +39,7 @@ wait_and_init_mariadb()
 # You should either run mysql_install_db with the same account that will be running mariadbd or run it as root with --user
 if [ ! -d /var/lib/mysql/mysql ]; then
 	ls -l /var/lib/mysql/mysql
-	echo "Installing database"
+	echo "MariaDB is not installed, installing it now ..."
 	
 	mariadb-install-db --user=root --datadir=/var/lib/mysql
 
@@ -47,6 +50,8 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 
 	# First launch the script which will wait in the background, then launch the daemon as PID 1 (foreground)
 	wait_and_init_mariadb &
+else
+	echo "MariaDB is already installed, starting up"
 fi
 
 #--user=root to run daemon as root, mandatory
