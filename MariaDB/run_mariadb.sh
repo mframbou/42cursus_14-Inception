@@ -9,7 +9,10 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	mariadb-install-db --user=root --datadir=/var/lib/mysql
 
 	# & at the end start process in the background
-	mariadbd --user=root &
+	# https://linuxcommand.org/lc3_man_pages/seth.html
+	# https://unix.stackexchange.com/questions/637002/how-do-i-foreground-a-job-in-a-script, https://stackoverflow.com/questions/5163144/what-are-the-special-dollar-sign-shell-variables
+	# &! is PID of most recent background command
+	mariadbd --user=root & MARIADB_PID=$!
 
 	# Pings check whether server is running, 0 if it is, 1 if not, retry 30 times
 	# To check for exit status, don't use brackets, only command directly
@@ -34,6 +37,8 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
 	mariadb -e "$(envsubst < /wordpress.sql)"
 
+	chown -R root /var/lib/mysql
+	
 	echo "Successfully intitialized mariadb"
 
 	# Since mariadbd is launched as a background process, wait for it to exit (basically shouldn't)
@@ -44,5 +49,7 @@ else
 	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
 	# unix_socket is a builtin plugin that allows to not use a password when connection from local machine, disable it here
 	# https://mariadb.com/kb/en/authentication-plugin-unix-socket/#options
-	mariadbd --user=root
+	
+	# exec to make it PID 1
+	exec mariadbd --user=root
 fi

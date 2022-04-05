@@ -17,11 +17,12 @@ if [ ! -f "/var/www/html/index.php" ]; then
 	mv /var/www/html/wordpress/* /var/www/html/
 
 	# Delete extracted archive folder
-	rmdir /wordpress-files/
+	rmdir /var/www/html/wordpress/
 	
 else
 	echo "Wordpress already present, skipping installation"
 fi
 
 # Force to stay in foreground with -F
-php-fpm7 -F
+# exec to make it PID 1
+exec php-fpm7 -F

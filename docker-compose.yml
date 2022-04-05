@@ -6,8 +6,10 @@ services:
     build: MariaDB/
     env_file:
       - .env
-    volumes:
-      - ./mariadb_volume:/var/lib/mysql
+    #volumes:
+    #  - /home/mframbou/data/mariadb:/var/lib/mysql
+    networks:
+      - pouet_network
 
   nginx:
     build: Nginx/
@@ -15,24 +17,28 @@ services:
       - 443:443
       - 80:80
     volumes:
-      - ./wordpress_volume:/var/www/localhost/htdocs/
+      - /home/mframbou/data/wordpress:/var/www/localhost/htdocs/
     depends_on:
       - wordpress
-      - adminer
-
-  adminer:
-    build: Adminer/
-    env_file:
-      - .env
+    networks:
+      - pouet_network
 
   wordpress:
     build: Wordpress/
     env_file:
       - .env
     volumes:
-      - ./wordpress_volume:/var/www/html
+      - /home/mframbou/data/wordpress:/var/www/html
     depends_on:
       - mariadb
+    networks:
+      - pouet_network
+
+  adminer:
+    build: Adminer/
+    restart: always
+    networks:
+      - pouet_network
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
@@ -41,5 +47,4 @@ services:
 
 # Simply change the name since all containers use the same network
 networks:
-  default:
-    name: inception-network
+  pouet_network:
