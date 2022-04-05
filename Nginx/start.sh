@@ -10,4 +10,4 @@ if [ ! -f /etc/ssl/certs/nginx-selfsigned.crt ]; then
 	echo "Successfully generated certificate"
 fi
 
-nginx -g 'daemon off;'
+exec nginx -g 'daemon off;'

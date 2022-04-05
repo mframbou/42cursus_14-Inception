@@ -24,4 +24,4 @@ else
 fi
 
 # Force to stay in foreground with -F
-php-fpm7 -F
+exec php-fpm7 -F
