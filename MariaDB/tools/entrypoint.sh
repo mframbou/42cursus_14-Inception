@@ -35,10 +35,10 @@ wait_and_init_mariadb()
 	echo "Successfully intitialized mariadb"
 }
 
+
 # Install db only one (if non-existent)
 # You should either run mysql_install_db with the same account that will be running mariadbd or run it as root with --user
 if [ ! -d /var/lib/mysql/mysql ]; then
-	ls -l /var/lib/mysql/mysql
 	echo "MariaDB is not installed, installing it now ..."
 	
 	mariadb-install-db --user=root --datadir=/var/lib/mysql
@@ -49,7 +49,8 @@ if [ ! -d /var/lib/mysql/mysql ]; then
 	# &! is PID of most recent background command
 
 	# First launch the script which will wait in the background, then launch the daemon as PID 1 (foreground)
-	wait_and_init_mariadb &
+	# Pass arguments to function since it will be runned as another process in background (otherwise it has no arguments)
+	wait_and_init_mariadb "$1" &
 else
 	echo "MariaDB is already installed, starting up"
 fi

@@ -4,15 +4,17 @@ services:
 
   mariadb:
     build: MariaDB/
+    restart: always
     env_file:
       - .env
-    #volumes:
-    #  - /home/mframbou/data/mariadb:/var/lib/mysql
+    volumes:
+      - /home/mframbou/data/mariadb:/var/lib/mysql
     networks:
       - pouet_network
 
   nginx:
     build: Nginx/
+    restart: always
     ports:
       - 443:443
       - 80:80
@@ -25,10 +27,11 @@ services:
 
   wordpress:
     build: Wordpress/
+    restart: always
     env_file:
       - .env
     volumes:
-      - /home/mframbou/data/wordpress:/var/www/html
+      - /home/mframbou/data/wordpress:/var/www/html/wordpress
     depends_on:
       - mariadb
     networks:
@@ -43,8 +46,10 @@ services:
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
 # Anonymous volume: /container/path/only (After container is removed, data is erased, volume cannot be accessed by another container)
-# Networking: https://docs.docker.com/network/ , https://forums.docker.com/t/set-default-network-name-for-compose/36779/2
 
-# Simply change the name since all containers use the same network
+# Networking: https://docs.docker.com/network/ , https://forums.docker.com/t/set-default-network-name-for-compose/36779/2
+# Restart: https://docs.docker.com/compose/compose-file/compose-file-v3/#restart
+
+# Dummy network, same as default basically
 networks:
   pouet_network:
