@@ -43,6 +43,14 @@ services:
     networks:
       - pouet_network
 
+  filezilla:
+    image: jlesage/filezilla
+    volumes:
+      - /config
+      - /home/mframbou/data/wordpress:/storage
+    ports:
+      - 5800:5800
+
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
 # Anonymous volume: /container/path/only (After container is removed, data is erased, volume cannot be accessed by another container)
