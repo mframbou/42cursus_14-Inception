@@ -43,13 +43,19 @@ services:
     networks:
       - pouet_network
 
-  filezilla:
-    image: jlesage/filezilla
+  ftp:
+    build: FTP/
+    restart: always
+    env_file:
+      - .env
     volumes:
-      - /config
-      - /home/mframbou/data/wordpress:/storage
+      - /home/mframbou/data/wordpress:/home/${FTP_USER}/
     ports:
-      - 5800:5800
+      - "20:20"
+      - "21:21"
+      - "${FTP_PASV_MIN_PORT}-${FTP_PASV_MAX_PORT}:${FTP_PASV_MIN_PORT}-${FTP_PASV_MAX_PORT}"
+    networks:
+      - pouet_network
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)
