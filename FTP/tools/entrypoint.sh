@@ -10,6 +10,19 @@ echo "" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_min_port=$FTP_PASV_MIN_PORT" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_max_port=$FTP_PASV_MAX_PORT" >> /etc/vsftpd/vsftpd.conf
 
-echo "Starting FTP Server"
 # https://www.systutorials.com/docs/linux/man/8-vsftpd/
-exec vsftpd /etc/vsftpd/vsftpd.conf
+
+stop_vsftpd()
+{
+    echo "Received stop signal, sending SIGTERM to vsftpd"
+    kill -SIGTERM $(pidof vsftpd)
+}
+
+# vsftpd doesn't seems to handle sigint, so when receiving it, send sigterm
+# (faster shutdown when using docker compose)
+#trap stop_vsftpd SIGINT SIGTERM
+trap stop_vsftpd SIGINT SIGTERM
+
+echo "Starting FTP Server"
+vsftpd /etc/vsftpd/vsftpd.conf &
+wait $(pidof vsftpd)
