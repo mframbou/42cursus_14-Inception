@@ -27,9 +27,10 @@ wait_and_init_mariadb()
 		
 		# Envsubst subsitutes environment in text, a lot cleaner
 		# https://mariadb.com/kb/en/authentication-plugin-unix-socket/
+		
 		mariadb -e "$(envsubst < /$1)"
 
-		chown -R root /var/lib/mysql
+		chmod -R 777 /var/lib/mysql
 	fi
 	
 	echo "Successfully intitialized mariadb"

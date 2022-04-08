@@ -9,6 +9,9 @@ RUN apk update && apk add php7-common php7-session php7-iconv php7-json php7-gd 
 	\
 	mkdir -p /var/www/html
 
+# Add execute permission for everyone directly
+ADD https://github.com/wp-cli/wp-cli/releases/download/v2.6.0/wp-cli-2.6.0.phar /usr/local/bin/wp-cli
+RUN chmod 755 /usr/local/bin/wp-cli
 COPY ./conf/www.conf /etc/php7/php-fpm.d/www.conf
 COPY ./tools/ /home/
 
