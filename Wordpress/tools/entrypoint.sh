@@ -25,16 +25,22 @@ if [ ! -f "/var/www/html/wordpress/index.php" ]; then
 			echo "Connection couldn't be established after 30 tries, exiting..."
 			exit 1
 		fi
-		sleep 1
+		sleep 2
 	done
 	echo "Successfully established mariadb connection"
 
 	echo "Creating wordpress config"
 	wp-cli config create --path=/var/www/html/wordpress/ --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST --allow-root
+	
 	echo "Installing wordpress base website"
 	wp-cli core install --path=/var/www/html/wordpress/ --title="Crackito's kingdom" --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --admin_email=$WORDPRESS_ADMIN_EMAIL --skip-email --url=localhost --allow-root
+
+	echo "Making dummy post"
+	wp-cli post create --path=/var/www/html/wordpress/ --post_title='What does ginger mean ?' --post_content='Go ask oronda' --post_status=publish --allow-root
+
+	echo "Successfully initialized wordpress, starting php-fpm"
 else
-	echo "Wordpress already present, skipping installation"
+	echo "Wordpress already present, starting php-fpm"
 fi
 
 # -F == --nodaemonize, force to run in foreground
