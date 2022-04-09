@@ -57,14 +57,16 @@ services:
     networks:
       - pouet_network
 
-  cache:
-    image: redis:6.2-alpine
+  redis:
+    image: redis:alpine
     restart: always
     ports:
       - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    command: redis-server --save 20 1 --loglevel warning
     volumes: 
       - /data
+    networks:
+      - pouet_network
 
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)

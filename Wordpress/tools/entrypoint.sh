@@ -35,6 +35,18 @@ if [ ! -f "/var/www/html/wordpress/index.php" ]; then
 	echo "Installing wordpress base website"
 	wp-cli core install --path=/var/www/html/wordpress/ --title="Crackito's kingdom" --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --admin_email=$WORDPRESS_ADMIN_EMAIL --skip-email --url=localhost --allow-root
 
+	# https://github.com/rhubarbgroup/redis-cache/wiki/WP-CLI-Commands
+	echo "Installing redis cache plugin"
+	wp-cli plugin install --path=/var/www/html/wordpress/ redis-cache --activate --allow-root
+
+	# https://wordpress.org/support/topic/plugin-ignores-define-wp_redis_host-xx-xx-xx-xx-when-external/
+	# Workaround is to just put it at the top of the file by doing so
+	# https://stackoverflow.com/questions/6739258/how-do-i-add-a-line-of-text-to-the-middle-of-a-file-using-bash
+	# Insert after authentication config
+	sed -ie "/WP_CACHE_KEY_SALT/a/** Redis configuration */\ndefine('WP_REDIS_HOST', '$WP_REDIS_HOST');" /var/www/html/wordpress/wp-config.php
+	wp-cli --path=/var/www/html/wordpress/ redis enable --allow-root
+	echo "Successfully installed and enabled redis cache plugin"
+
 	echo "Making dummy post"
 	wp-cli post create --path=/var/www/html/wordpress/ --post_title='What does ginger mean ?' --post_content='Go ask oronda' --post_status=publish --allow-root
 
