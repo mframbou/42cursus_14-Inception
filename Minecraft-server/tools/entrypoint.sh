@@ -1,13 +1,18 @@
-# To start server in the right directoy
-cd /home/server/
+#!/bin/sh
 
-if [ ! -f /home/server/eula.txt ]; then
+if [ ! -f ./server.jar ]; then
+    cp /home/server.jar ./server.jar
 
     echo "Starting server to generate EULA file"
-    java -Xmx1024M -jar /home/server/server.jar --nogui
+    java -Xmx1024M -jar ./server.jar --nogui
 
     echo "Accepting EULA"
-    sed -i 's/eula=false/eula=true/g' /home/server/eula.txt
+    sed -i 's/eula=false/eula=true/g' ./eula.txt
+else
+    echo "Minecraft server already present, skipping installation"
 fi
 
-exec java -Xmx1024M -jar /home/server/server.jar --nogui
+rm /home/server.jar
+mv /home/server.properties ./server.properties
+
+exec java -Xmx1024M -jar ./server.jar --nogui

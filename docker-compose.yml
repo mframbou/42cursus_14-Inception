@@ -77,6 +77,14 @@ services:
     volumes:
       - /home/mframbou/data/static-website:/var/www/html
 
+  minecraft-server:
+    build: Minecraft-server
+    restart: always
+    ports:
+      - 25565:25565
+    volumes:
+      - /home/mframbou/data/minecraft-server:/var/lib/minecraft-server
+
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
 # Named volume: named_volume_name:/container/path (Data persists after removing container, accessible by other containers, created in /var/lib/docker/volumes on host)

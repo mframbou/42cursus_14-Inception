@@ -5,12 +5,15 @@ FROM alpine:3.14
 # jre: https://pkgs.alpinelinux.org/package/edge/community/x86/openjdk8-jre
 RUN apk update && apk add openjdk8-jre
 
-RUN mkdir -p /home/server/
+# This hierarchy holds state information pertaining to an application or the system
+RUN mkdir -p /var/lib/minecraft-server/
 
-ADD https://launcher.mojang.com/v1/objects/b58b2ceb36e01bcd8dbf49c8fb66c55a9f0676cd/server.jar /home/server/server.jar
+WORKDIR /var/lib/minecraft-server/
+
+ADD https://launcher.mojang.com/v1/objects/b58b2ceb36e01bcd8dbf49c8fb66c55a9f0676cd/server.jar /home/server.jar
 
 COPY ./tools/ /home/
 # Change MOTD and allow crack
-COPY ./conf/server.properties /home/server/server.properties
+COPY ./conf/server.properties /home/server.properties
 
 CMD [ "sh", "/home/entrypoint.sh" ]
