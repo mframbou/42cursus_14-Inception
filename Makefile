@@ -1,12 +1,32 @@
-all:
+SHELL := /bin/bash # Otherwise read mess up with zsh
+
+all: stop add-domain
 	docker-compose --file=./srcs/docker-compose.yml --env-file=./srcs/.env up
+
+up: all
+
+start: up
 
 down:
 	docker-compose --file=./srcs/docker-compose.yml --env-file=./srcs/.env down
 
 stop: down
 
-re: prune all
+re: down prune all
+
+restart: down all
+
+add-domain:
+# Quiet grep, only need exit status
+# read -n 1 = read 1 char, -r = no escaped characters, -p = prompt, line is stored in REPLY variable
+	@if ! grep -q "mframbou.42.fr" /etc/hosts ; then \
+		echo "Domain mframbou.42.fr redirection to localhost not found."; \
+		read -p "Do you wish to add it now (require sudo) ? [y/n] " -r; \
+		if [[ $$REPLY =~ ^[Yy] ]] ; then \
+            sudo sed -i '/^127.0.0.1/a127.0.0.1 mframbou.42.fr' /etc/hosts; \
+        fi; \
+	fi;
+
 
 prune:
 # - at the start ignores if a command fails
