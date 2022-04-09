@@ -3,7 +3,8 @@ version: "3"
 services:
 
   mariadb:
-    build: MariaDB/
+    build: requirements/MariaDB/
+    container_name: mariadb
     restart: always
     env_file:
       - .env
@@ -13,12 +14,12 @@ services:
       - pouet_network
 
   nginx:
-    build: Nginx/
+    build: requirements/Nginx/
+    container_name: nginx
     restart: always
     ports:
       - 443:443
-      - 8080:8080
-      #- 8081:8081
+      - ${ADMINER_PORT}:8080
     volumes:
       - /home/mframbou/data/wordpress:/var/www/localhost/htdocs/wordpress
       - /home/mframbou/data/static-website:/var/www/localhost/htdocs/website
@@ -28,7 +29,8 @@ services:
       - pouet_network
 
   wordpress:
-    build: Wordpress/
+    build: requirements/Wordpress/
+    container_name: wordpress
     restart: always
     env_file:
       - .env
@@ -41,13 +43,15 @@ services:
       - pouet_network
 
   adminer:
-    build: Adminer/
+    build: requirements/bonus/Adminer/
+    container_name: adminer
     restart: always
     networks:
       - pouet_network
 
   ftp:
-    build: FTP/
+    build: requirements/bonus/FTP/
+    container_name: ftp
     restart: always
     env_file:
       - .env
@@ -62,26 +66,29 @@ services:
 
   # Use redis-client monitor to monitor
   redis:
-    build: Redis/
+    build: requirements/bonus/Redis/
+    container_name: redis
     restart: always
     volumes: 
       - /home/mframbou/data/redis-cache:/var/lib/redis
     networks:
       - pouet_network
 
-  static-website:
-    build: Website/
+  website:
+    build: requirements/bonus/Website/
+    container_name: website
     restart: always
     ports:
-      - 8081:8080
+      - ${STATIC_WEBSITE_PORT}:8080
     volumes:
-      - /home/mframbou/data/static-website:/var/www/html
+      - /home/mframbou/data/website:/var/www/html
 
   minecraft-server:
-    build: Minecraft-server
+    build: requirements/bonus/Minecraft-server
+    container_name: minecraft-server
     restart: always
     ports:
-      - 25565:25565
+      - ${MC_SERVER_PORT}:25565
     volumes:
       - /home/mframbou/data/minecraft-server:/var/lib/minecraft-server
 
