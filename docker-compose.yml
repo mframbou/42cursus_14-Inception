@@ -17,9 +17,11 @@ services:
     restart: always
     ports:
       - 443:443
-      - 80:80
+      - 8080:8080
+      #- 8081:8081
     volumes:
-      - /home/mframbou/data/wordpress:/var/www/localhost/htdocs/
+      - /home/mframbou/data/wordpress:/var/www/localhost/htdocs/wordpress
+      - /home/mframbou/data/static-website:/var/www/localhost/htdocs/website
     depends_on:
       - wordpress
     networks:
@@ -34,6 +36,7 @@ services:
       - /home/mframbou/data/wordpress:/var/www/html/wordpress
     depends_on:
       - mariadb
+      - redis
     networks:
       - pouet_network
 
@@ -57,16 +60,22 @@ services:
     networks:
       - pouet_network
 
+  # Use redis-client monitor to monitor
   redis:
-    image: redis:alpine
+    build: Redis/
     restart: always
-    ports:
-      - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning
     volumes: 
-      - /data
+      - /home/mframbou/data/redis-cache:/var/lib/redis
     networks:
       - pouet_network
+
+  static-website:
+    build: Website/
+    restart: always
+    ports:
+      - 8081:8080
+    volumes:
+      - /home/mframbou/data/static-website:/var/www/html
 
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)

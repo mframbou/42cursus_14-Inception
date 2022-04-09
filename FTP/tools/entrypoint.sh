@@ -11,7 +11,8 @@ echo "pasv_min_port=$FTP_PASV_MIN_PORT" >> /etc/vsftpd/vsftpd.conf
 echo "pasv_max_port=$FTP_PASV_MAX_PORT" >> /etc/vsftpd/vsftpd.conf
 
 # https://www.systutorials.com/docs/linux/man/8-vsftpd/
-
+# https://docs.docker.com/compose/faq/#:~:text=Compose%20stop%20attempts%20to%20stop,they%20receive%20the%20SIGTERM%20signal.
+# Docker send SIGTERM then SIGKILL
 stop_vsftpd()
 {
     echo "Received stop signal, sending SIGTERM to vsftpd"

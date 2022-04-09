@@ -8,12 +8,17 @@ if [ ! -f "/var/www/html/wordpress/index.php" ]; then
 	# Download file, output to stdout then pipe to tar to extract directly
 	# -O = output file (here - = stdout), -q = quiet mode
 	# -x = extract, -v = verbose, -z use GZIP to manage automatically, -C = change directory (same as --directory)
-	wget -q -O - https://wordpress.org/wordpress-5.9.2.tar.gz | tar -xvz -C /var/www/html
+	# https://stackoverflow.com/questions/19372373/how-to-add-progress-bar-to-a-somearchive-tar-xz-extract
+	wget -O /home/wordpress.tar.gz https://wordpress.org/wordpress-5.9.2.tar.gz
+
+	echo "Extracting wordpress..."
+	pv /home/wordpress.tar.gz | tar -xz -C /var/www/html
+	rm /home/wordpress.tar.gz
 	
 	chmod -R 777 /var/www/html
 	echo "Successfully downloaded wordpress"
-	echo "Installing wordpress..."
 
+	echo "Installing wordpress..."
 	echo "Establishing connection to mariadb..."
 	# Wait for user to be created and working, see https://stackoverflow.com/questions/18522847/mysqladmin-ping-error-code
 	# ping returns 0 even if connection is refused for user (because server is running), status doesn't
