@@ -40,6 +40,9 @@ if [ ! -f "/var/www/html/wordpress/index.php" ]; then
 	echo "Installing wordpress base website"
 	wp-cli core install --path=/var/www/html/wordpress/ --title="Crackito's kingdom" --admin_user=$WORDPRESS_ADMIN_USER --admin_password=$WORDPRESS_ADMIN_PASSWORD --admin_email=$WORDPRESS_ADMIN_EMAIL --skip-email --url=localhost --allow-root
 
+	echo "Creating user $WORDPRESS_USER"
+	wp-cli user create $WORDPRESS_USER $WORDPRESS_USER_EMAIL --user_pass=$WORDPRSES_USER_PASSWORD --role=subscriber --path=/var/www/html/wordpress/ --allow-root
+	
 	# https://github.com/rhubarbgroup/redis-cache/wiki/WP-CLI-Commands
 	echo "Installing redis cache plugin"
 	wp-cli plugin install --path=/var/www/html/wordpress/ redis-cache --activate --allow-root
