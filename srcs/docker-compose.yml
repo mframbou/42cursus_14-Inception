@@ -108,25 +108,25 @@ volumes:
   wordpress-volume:
     driver_opts:
       o: bind
-      device: ~/data/wordpress
+      device: /home/mframbou/data/wordpress
       type: none
 
   mariadb-volume:
     driver_opts:
       o: bind
-      device: ~/data/mariadb
+      device: /home/mframbou/data/mariadb
       type: none
 
   minecraft-server-volume:
     driver_opts:
       o: bind
-      device: ~/data/minecraft-server
+      device: /home/mframbou/data/minecraft-server
       type: none
 
   static-website-volume:
     driver_opts:
       o: bind
-      device: ~/data/static-website
+      device: /home/mframbou/data/static-website
       type: none
 
 # Dummy network, same as default basically
