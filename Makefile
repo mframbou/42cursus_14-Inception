@@ -27,6 +27,23 @@ add-domain:
         fi; \
 	fi;
 
+add-volumes-folders:
+	@if [ ! -d ~/data/wordpress ]; then \
+		mkdir -p /data/wordpress; \
+	fi;
+
+	@if [ ! -d ~/data/mariadb ]; then \
+		mkdir -p /data/mariadb; \
+	fi;
+
+	@if [ ! -d ~/data/minecraft-server ]; then \
+		mkdir -p /data/minecraft-server; \
+	fi;
+
+	@if [ ! -d ~/data/static-website ]; then \
+		mkdir -p /data/static-website; \
+	fi;
+
 
 prune:
 # - at the start ignores if a command fails
