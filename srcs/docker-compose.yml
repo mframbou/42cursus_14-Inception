@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/mframbou/data/mariadb:/var/lib/mysql
+      - mariadb-volume:/var/lib/mysql
     networks:
       - pouet_network
 
@@ -21,8 +21,8 @@ services:
       - 443:443
       - ${ADMINER_PORT}:8080
     volumes:
-      - /home/mframbou/data/wordpress:/var/www/localhost/htdocs/wordpress
-      - /home/mframbou/data/static-website:/var/www/localhost/htdocs/website
+      - wordpress-volume:/var/www/localhost/htdocs/wordpress
+      - static-website-volume:/var/www/localhost/htdocs/website
     depends_on:
       - wordpress
     networks:
@@ -35,7 +35,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/mframbou/data/wordpress:/var/www/html/wordpress
+      - wordpress-volume:/var/www/html/wordpress
     depends_on:
       - mariadb
       - redis
@@ -56,7 +56,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /home/mframbou/data/wordpress:/home/${FTP_USER}/
+      - wordpress-volume:/home/${FTP_USER}/
     ports:
       - "20:20"
       - "21:21"
@@ -69,8 +69,8 @@ services:
     build: requirements/bonus/Redis/
     container_name: redis
     restart: always
-    volumes: 
-      - /home/mframbou/data/redis-cache:/var/lib/redis
+    #volumes: 
+    #  - ~/data/redis-cache:/var/lib/redis
     networks:
       - pouet_network
 
@@ -81,7 +81,7 @@ services:
     ports:
       - ${STATIC_WEBSITE_PORT}:8080
     volumes:
-      - /home/mframbou/data/website:/var/www/html
+      - static-website-volume:/var/www/html
 
   minecraft-server:
     build: requirements/bonus/Minecraft-server
@@ -90,7 +90,7 @@ services:
     ports:
       - ${MC_SERVER_PORT}:25565
     volumes:
-      - /home/mframbou/data/minecraft-server:/var/lib/minecraft-server
+      - minecraft-server-volume:/var/lib/minecraft-server
 
 
 # Host-mounted volume: /host/path:/container/path (Binded to the host given path)
@@ -99,6 +99,35 @@ services:
 
 # Networking: https://docs.docker.com/network/ , https://forums.docker.com/t/set-default-network-name-for-compose/36779/2
 # Restart: https://docs.docker.com/compose/compose-file/compose-file-v3/#restart
+
+# mount [-fnrsvw] [-o options] device|mountpoint
+# https://man7.org/linux/man-pages/man8/mount.8.html
+# https://linux.die.net/man/8/mount "Mount options for coherent: None"
+# Only option needed is bind
+volumes:
+  wordpress-volume:
+    driver_opts:
+      o: bind
+      device: ~/data/wordpress
+      type: none
+
+  mariadb-volume:
+    driver_opts:
+      o: bind
+      device: ~/data/mariadb
+      type: none
+
+  minecraft-server-volume:
+    driver_opts:
+      o: bind
+      device: ~/data/minecraft-server
+      type: none
+
+  static-website-volume:
+    driver_opts:
+      o: bind
+      device: ~/data/static-website
+      type: none
 
 # Dummy network, same as default basically
 networks:
