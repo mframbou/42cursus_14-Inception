@@ -1,6 +1,6 @@
 SHELL := /bin/bash # Otherwise read mess up with zsh
 
-all: stop add-domain
+all: stop add-domain add-volumes-folders
 	docker-compose --file=./srcs/docker-compose.yml --env-file=./srcs/.env up
 
 up: all
