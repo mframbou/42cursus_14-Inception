@@ -29,19 +29,19 @@ add-domain:
 
 add-volumes-folders:
 	@if [ ! -d ~/data/wordpress ]; then \
-		mkdir -p /data/wordpress; \
+		mkdir -p ~/data/wordpress; \
 	fi;
 
 	@if [ ! -d ~/data/mariadb ]; then \
-		mkdir -p /data/mariadb; \
+		mkdir -p ~/data/mariadb; \
 	fi;
 
 	@if [ ! -d ~/data/minecraft-server ]; then \
-		mkdir -p /data/minecraft-server; \
+		mkdir -p ~/data/minecraft-server; \
 	fi;
 
 	@if [ ! -d ~/data/static-website ]; then \
-		mkdir -p /data/static-website; \
+		mkdir -p ~/data/static-website; \
 	fi;
 
 
